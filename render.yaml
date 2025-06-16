@@ -18,12 +18,12 @@ services:
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        value: 127.0.0.1
+        value: dpg-d18103ogjchc73f8kor0-a
       - key: DB_PORT
-        value: 3306
+        value: 5432
       - key: DB_DATABASE
-        value: fd_recom
+        value: fd_recomdb
       - key: DB_USERNAME
-        value: root
+        value: fd_recomdb_user
       - key: DB_PASSWORD
-        value: 
+        value: dd44fP2Qlrkmb15DzBUB76Kl5QSF1NGB

@@ -23,17 +23,21 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy Laravel files
+# Copy Laravel project files
 COPY . .
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-# Give permission
+# Set correct permissions
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+    && chmod -R 755 /var/www/storage \
+    && chmod -R 755 /var/www/bootstrap/cache
+
+# Laravel needs the APP_KEY before migration
+# So we wait to run migrations *after* container starts
 
 EXPOSE 8000
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
-
+# Start Laravel + run migration after container starts
+CMD php artisan migrate --force && php -S 0.0.0.0:8000 -t public

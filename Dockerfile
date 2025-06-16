@@ -15,8 +15,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libcurl4-openssl-dev \
     libssl-dev \
-    default-mysql-client \
-    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring zip exif pcntl
+    && docker-php-ext-install pdo_pgsql mbstring zip exif pcntl
 
 # Install Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
@@ -35,10 +34,9 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
     && chmod -R 755 /var/www/bootstrap/cache
 
-# Laravel needs the APP_KEY before migration
-# So we wait to run migrations *after* container starts
-
 EXPOSE 8000
 
-# Start Laravel + run migration after container starts
-CMD php artisan migrate --force && php -S 0.0.0.0:8000 -t public
+# Start Laravel and bind to correct port
+CMD php artisan migrate --force && php -S 0.0.0.0:${PORT:-8000} -t public
+
+

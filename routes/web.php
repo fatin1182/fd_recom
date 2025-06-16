@@ -70,3 +70,8 @@ Route::get('/test-spoonacular', function () {
 
     return $response->json();
 });
+
+// In routes/web.php
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});

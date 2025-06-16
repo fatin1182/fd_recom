@@ -16,7 +16,7 @@ services:
       - key: SPOONACULAR_API_KEYS
         sync: false
       - key: DB_CONNECTION
-        value: mysql
+        value: pgsql
       - key: DB_HOST
         value: dpg-d18103ogjchc73f8kor0-a
       - key: DB_PORT

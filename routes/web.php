@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Http;
 */
 
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index']);
 
 // Dashboard route
 Route::get('/dashboard', [DashboardController::class, 'index'])

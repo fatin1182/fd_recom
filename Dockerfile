@@ -27,16 +27,21 @@ WORKDIR /var/www
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --prefer-dist --optimize-autoloader --no-dev
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
     && chmod -R 755 /var/www/bootstrap/cache
 
+# Copy and enable entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 8000
 
-# Start Laravel and bind to correct port
-CMD php artisan migrate --force && php -S 0.0.0.0:${PORT:-8000} -t public
+# Start Laravel via entrypoint
+CMD ["/entrypoint.sh"]
+
 
 

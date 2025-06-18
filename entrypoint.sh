@@ -1,24 +1,26 @@
 #!/bin/sh
 
-# Wait for DB to be ready (optional: you can use health check instead in prod)
 echo "⏳ Waiting for database..."
 sleep 5
 
-# Ensure Laravel key is set
-if [ ! -f /var/www/bootstrap/cache/config.php ]; then
+# Set key if not cached
+if [ ! -f /var/www/storage/oauth-private.key ]; then
   echo "🔐 Generating app key..."
-  php artisan key:generate
+  php artisan key:generate --force
 fi
 
-# Clear old cache (optional but safe)
+# Clear and cache configuration
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
+php artisan config:cache
+php artisan route:cache
 
 # Run migrations
 echo "📦 Running migrations..."
 php artisan migrate --force
 
-# Start Laravel app using PHP’s built-in server
+# Start Laravel server
 echo "🚀 Starting Laravel app..."
-php -S 0.0.0.0:${PORT:-8000} -t public
+exec php -S 0.0.0.0:${PORT:-8000} -t public
+

@@ -30,9 +30,11 @@ COPY . .
 RUN composer install --prefer-dist --optimize-autoloader --no-dev
 
 # Set correct permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+    && chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
+RUN mkdir -p /var/www/storage/framework/{sessions,views,cache} \
+    && chown -R www-data:www-data /var/www/storage
+
 
 # Copy and enable entrypoint script
 COPY entrypoint.sh /entrypoint.sh

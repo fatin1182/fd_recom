@@ -13,6 +13,8 @@ services:
         generateValue: true
       - key: APP_DEBUG
         value: false
+      - key: APP_URL
+        value: https://fd-recom.onrender.com
       - key: SPOONACULAR_API_KEYS
         sync: false
       - key: DB_CONNECTION

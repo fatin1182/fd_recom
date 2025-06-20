@@ -3,6 +3,8 @@ vendor
 .env
 .git
 .gitignore
-tests
+tests/
+storage/logs
 *.log
 docker-compose.yml
+

@@ -11,6 +11,11 @@ class HealthDataController extends Controller
     {
         $user = auth()->user();
 
+        if (!$user) {
+            \Log::error('No authenticated user found during health data update.');
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
         // Optionally cache the user's profile data view or other data if needed
         // For now, just return view directly
         return view('health-data.edit', compact('user'));
@@ -18,6 +23,13 @@ class HealthDataController extends Controller
 
     public function update(Request $request)
     {
+         $user = auth()->user();
+
+        if (!$user) {
+            \Log::error('No authenticated user found during health data update.');
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
         $validated = $request->validate([
             'blood_pressure_systolic' => 'nullable|integer|min:50|max:300',
             'blood_pressure_diastolic' => 'nullable|integer|min:30|max:200',
@@ -89,10 +101,10 @@ class HealthDataController extends Controller
         unset($validated['blood_pressure_diastolic']);
 
         // Update user health data
-        auth()->user()->update($validated);
+        $user->update($validated);
 
         // Cache invalidation: increment version key for this user to invalidate cached recommendations or any cached health data
-        $versionKey = 'recommendations_version_user_' . auth()->id();
+        $versionKey = 'recommendations_version_user_' . $user->id;
         Cache::increment($versionKey);
 
         $successMessage = 'Health data updated successfully!';

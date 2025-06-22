@@ -250,7 +250,7 @@ class FoodRecommendationController extends Controller
             ->all();
 
         $totalResults = $response->json()['totalResults'] ?? 0;
-        $totalPages = min(25, ceil($totalResults / $recipesPerPage));
+        $totalPages = min(5, ceil($totalResults / $recipesPerPage));
         $detailedRecipes = [];
 
         foreach ($recipes as $recipe) {
